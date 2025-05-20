@@ -7,8 +7,8 @@
 
 class Player {
 private:
-    std::string name; // Player's name
-    int etherium; // Amount of etherium per player
+    std::string name;
+    int etherium; 
     //std::vector<std::unique_ptr<Ship>> fleet; // Player's fleet of ships
 
 public:
@@ -23,7 +23,7 @@ public:
     //Pendientes de implementar
 
 
-    // Info
+    // Information
     std::string getName() const;
     void displayStatus() const;
 };
