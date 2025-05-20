@@ -3,7 +3,8 @@
 using namespace std;
 
 Player::Player(const std::string& initialName) {
-    //se inicializara el nombre del jugador	
+    name = initialName;
+    etherium = 0; 
 }
 
 int Player::getEtherium() const {

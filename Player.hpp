@@ -20,7 +20,7 @@ public:
     bool spendEtherium(int amount);
 
     // Actions
-    
+    //Pendientes de implementar
 
 
     // Info
