@@ -2,7 +2,7 @@
 #include <iostream>
 
 Game::Game() {
-turn = 1; //Es un 1 porque es el primer turno
+    turn = 1; //Es un 1 porque es el primer turno
 }
 
 void Game::start() {
@@ -15,4 +15,8 @@ void Game::nextTurn() {
 
 void Game::showStatus() {
 // Mostrar el estado actual del juego
+}
+
+int Game::getTurn() const {
+    return turn;
 }
