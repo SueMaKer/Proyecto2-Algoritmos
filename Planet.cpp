@@ -1,37 +1,58 @@
-#ifndef PLANET_H
-#define PLANET_H
+#include "Planet.hpp"
+#include <iostream>
 
-#include <string>
-#include <vector>
+Planet::Planet(const std::string& name, const std::string& description, bool combat, bool resources)
+    : name(name), description(description), hasCombat(combat), hasResources(resources), isVisited(false) {}
 
-class Planet {
-private:
-    std::string name;
-    std::string description;
+Planet::~Planet() {
 
-    bool isVisited;
+}
 
-    std::vector<Planet*> neighbors; 
-public:
-    // Constructor
-    Planet(const std::string& name, const std::string& description, bool combat, bool resources);
+std::string Planet::getName() const {
+    return name;
+}
 
-    // Destructor
-    ~Planet();
+std::string Planet::getDescription() const {
+    return description;
+}
 
-    std::string getName() const;
+bool Planet::hasCombatZone() const {
+    return hasCombat;
+}
 
-    
-    void addNeighbor(Planet* neighbor);
+bool Planet::hasResourceSite() const {
+    return hasResources;
+}
 
-    std::vector<Planet*> getNeighbors() const;
+// Vecindad
+void Planet::addNeighbor(Planet* neighbor) {
+    neighbors.push_back(neighbor);
+}
 
+std::vector<Planet*> Planet::getNeighbors() const {
+    return neighbors;
+}
 
-    void markVisited();
+// Visita
+void Planet::markVisited() {
+    isVisited = true;
+}
 
-    bool wasVisited() const;
+bool Planet::wasVisited() const {
+return isVisited;
+}
 
-    void printInfo() const;
-};
+// Información
+void Planet::printInfo () const {
+    std::cout << "Planeta: " << name << "\n";
+    std::cout << "Descripción: " << description << "\n";
+    std::cout << "Zona de combate: " << (hasCombat ? "Sí" : "No") << "\n";
+    std::cout << "Recursos disponibles: " << (hasResources ? "Sí" : "No") << "\n";
+    std::cout << "Visitado: " << (isVisited ? "Sí" : "No") << "\n";
+    std::cout << "Vecinos() : ";
+    for (const auto& neighbor : neighbors) {
+        std::cout << neighbor->getName() << " ";
+    }
+    std::cout << "\n";
+}
 
-#endif 
