@@ -3,29 +3,31 @@
 
 #include <vector>
 #include <string>
-#include <memory>
 
 class Player {
 private:
     std::string name;
     int etherium; 
-    //std::vector<std::unique_ptr<Ship>> fleet; // Player's fleet of ships
+    //std::vector<std::unique_ptr<Ship>> fleet; // Player's fleet of ships, pending implementation
 
 public:
     Player(const std::string& initialName);
 
-    // Resources
+    // Game resources
     int getEtherium() const;
     void addEtherium(int amount);
     bool spendEtherium(int amount);
 
-    // Actions
-    //Pendientes de implementar
-
-
-    // Information
+     //Player's information
     std::string getName() const;
     void displayStatus() const;
+
+    // Actions pending implementation
+    
+    //int useCartographer(Cartographer* cartographer, Planet* origin, Planet* destination);
+    //void attackBoss(Planet* planet, Ship* usedShip);
+    //void addShip(Ship* ship);
+    //void useProbe(Probe* probe, Planet* from)
 };
 
 #endif // PLAYER_HPP
