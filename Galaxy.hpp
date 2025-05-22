@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "Planeta.hpp"
+#include "Planet.hpp"
 
 class Galaxy {
 private:

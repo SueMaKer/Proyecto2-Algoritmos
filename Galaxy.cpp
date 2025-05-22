@@ -1,10 +1,10 @@
-#ifndef GALAXY_H
-#define GALAXY_H
+#ifndef GALAXY_HPP
+#define GALAXY_HPP
 
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "Planet.h"
+#include "Planet.hpp"
 
 class Galaxy {
 private:
