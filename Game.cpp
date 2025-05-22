@@ -2,19 +2,25 @@
 #include <iostream>
 
 Game::Game() {
-    turn = 1; //Es un 1 porque es el primer turno
+    turn = 1; //It's the first turn
 }
 
 void Game::start() {
-//Inicialización del juego
+    //Game initialization logic
+    std::cout << "Game started!" << std::endl;
+    std::cout << "Turn: " << turn << std::endl;
 }
 
 void Game::nextTurn() {
-// Lógica para avanzar al siguiente turno
+    // Logic for the next turn
+    std::cout << "Next turn!" << std::endl;
+    turn++;
+    std::cout << "Turn: " << turn << std::endl;
 }
 
 void Game::showStatus() {
-// Mostrar el estado actual del juego
+// Show the status of the game
+    std::cout << "Current turn: " << turn << std::endl;
 }
 
 int Game::getTurn() const {
