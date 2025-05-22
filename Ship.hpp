@@ -9,9 +9,6 @@ public:
     Ship();
 
    
-    void setBaseDamage(double baseDamage);
-
-   
     virtual int executeAttack() = 0;
 
    

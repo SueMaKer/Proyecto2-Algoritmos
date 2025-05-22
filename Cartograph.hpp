@@ -1,14 +1,14 @@
-#ifndef CARTOGRAPHER_HPP
-#define CARTOGRAPHER_HPP
+#ifndef CARTOGRAPH_HPP
+#define CARTOGRAPH_HPP
 
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-class Cartographer {
+class Cartograph {
 public:
     
-    Cartographer();
+    Cartograph();
 
     
     void setGraph(const std::unordered_map<std::string, std::vector<std::pair<std::string, int>>>& costGraph);

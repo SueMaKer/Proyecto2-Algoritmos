@@ -1,14 +1,14 @@
-#ifndef SONDA_HPP
-#define SONDA_HPP
+#ifndef PROBE_HPP
+#define PROBE_HPP
 
 #include <string>
 #include <vector>
 #include <unordered_map>
 
-class Sonda {
+class Probe {
 public:
     
-    Sonda();
+    Probe();
 
    
     void setGraph(const std::unordered_map<std::string, std::vector<std::string>>& universeGraph);
