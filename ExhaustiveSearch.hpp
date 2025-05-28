@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class ExhaustiveSearch : public Ship {
+class ExhaustiveSearch {
 private:
     const Graph& graph;
     std::vector<bool> visited;
@@ -16,7 +16,7 @@ private:
     std::vector<int> currentPath;
     std::vector<int> bestPath;
     bool usePruning = false;  
-
+    int iterations = 0;
 
     void backtrack(int current, int target, int accumulatedCost);
 
