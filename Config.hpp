@@ -6,7 +6,7 @@ namespace Config {
     // Ether costs
     constexpr int DIJKSTRA_ETHER_COST = 5;
     constexpr int FLOYD_ETHER_COST = 20;
-    constexpr int LOCAL_SEARCH_COST
+    constexpr int LOCAL_SEARCH_COST = 10;
     // Probe limits
     constexpr int DEFAULT_DFS_DEPTH = 3;
 
@@ -15,12 +15,13 @@ namespace Config {
 
     constexpr int DEFAULT_LYNK_PROBABILITY = 3;
 
+    //Exhaustive Search
+    constexpr int SEARCH_WITH_PRUNING = true;
+    constexpr int SEARCH_WITHOUT_PRUNING = false;
+
+    //FloydWarshall
+    const int INF = 1e9;
     
-   
-    
-    GREEDY_SEARCH_COST
-    MINE_YIELD 
-    BASE_DAMAGE
 }
 
 #endif
