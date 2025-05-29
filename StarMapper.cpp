@@ -3,17 +3,17 @@
 
 StarMapper::StarMapper(const vector<vector<int>>* adjacencyMatrix, const vector<int>* exploredPlanetsPtr)
         : Ship(), exploredPlanetsPtr(exploredPlanetsPtr), floyd(adjacencyMatrix->size()) {
-        // Agrega aristas desde la matriz de adyacencia
-        for (int i = 0; i < adjacencyMatrix->size(); ++i) {
-            for (int j = 0; j < (*adjacencyMatrix)[i].size(); ++j) {
-                int cost = (*adjacencyMatrix)[i][j];
-                if (cost < Config::INF / 2) {
-                    floyd.addEdge(i, j, cost);
-                }
+    // Agrega aristas desde la matriz de adyacencia
+    for (int i = 0; i < adjacencyMatrix->size(); ++i) {
+        for (int j = 0; j < (*adjacencyMatrix)[i].size(); ++j) {
+            int cost = (*adjacencyMatrix)[i][j];
+            if (cost < Config::INF / 2) {
+                floyd.addEdge(i, j, cost);
             }
         }
-        floyd.run(); // Ejecuta algoritmo al construir
     }
+    floyd.run(); // Ejecuta algoritmo al construir
+}
 
 vector<string> StarMapper::getEtheriumCostsReport() const {
     vector<string> report;
