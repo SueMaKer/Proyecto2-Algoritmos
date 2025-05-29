@@ -1,3 +1,4 @@
+
 #include "Graph.hpp"
 
 Graph::Graph(int nodes) : cantNodes(nodes), adjacencyList(nodes) {}
