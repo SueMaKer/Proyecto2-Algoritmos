@@ -7,14 +7,13 @@ class Ship {
 public:
    
     Ship();
-
    
-    virtual int executeAttack() = 0;
+    //virtual int executeAttack() = 0;
 
-   
     double calculateEffectiveDamage(int iterations) const;
 
 protected:
+    int iterations;
     double baseDamage;
 };
 
