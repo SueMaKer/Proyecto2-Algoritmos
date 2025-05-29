@@ -1,26 +1,26 @@
-#ifndef LOCAL_SEARCH_HPP
-#define LOCAL_SEARCH_HPP
+#ifndef LOCALSEARCH_HPP
+#define LOCALSEARCH_HPP
 
 #include <vector>
-#include <functional>
-
-using namespace std;
 
 class LocalSearch {
-public:
-    using Solution = vector<int>;
-    using NeighborGenerator = function<vector<Solution>(const Solution&)>;
-    using EvaluationFunction = function<double(const Solution&)>;
-
-    // Constructor that defines the neighbor generator and evaluation function
-    LocalSearch(NeighborGenerator generator, EvaluationFunction evaluator);
-
-    // executes the local search algorithm starting from an initial solution
-    Solution run(const Solution& initialSolution);
-
 private:
-    NeighborGenerator generateNeighbors;
-    EvaluationFunction evaluate;
+    const std::vector<std::vector<int>>& costMatrix;
+    int node;
+    int INF;
+    std::vector<int> neighbors;
+    int iterations;
+
+public:
+    // Constructor: take the adjacency matrix, the node to analyze, and the value of INF
+    LocalSearch(const std::vector<std::vector<int>>& matrix, int startNode, int infinityValue = 1e9);
+
+    // Excecutes the "local search"
+    void run();
+
+    // Return the neighbors found
+    const std::vector<int>& getNeighbors() const;
 };
 
-#endif // LOCAL_SEARCH_HPP
+#endif
+

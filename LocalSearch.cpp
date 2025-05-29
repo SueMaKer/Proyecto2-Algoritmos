@@ -1,29 +1,24 @@
 #include "LocalSearch.hpp"
 
-//Constructor of the LocalSearch class that initializes the neighbor generator and evaluation function.
-LocalSearch::LocalSearch(NeighborGenerator generator, EvaluationFunction evaluator)
-    : generateNeighbors(generator), evaluate(evaluator) {}
+// Constructor for the LocalSearch class
+LocalSearch::LocalSearch(const std::vector<std::vector<int>>& matrix, int startNode, int infinityValue)
+    : costMatrix(matrix), node(startNode), INF(infinityValue) {}
 
-// Runs the local search algorithm starting from an initial solution.
-LocalSearch::Solution LocalSearch::run(const Solution& initialSolution) {
-    Solution current = initialSolution;
-    double bestScore = evaluate(current);
-    bool improved = true;
-
-    while (improved) {
-        improved = false;
-        vector<Solution> neighbors = generateNeighbors(current);
-
-        for (const auto& neighbor : neighbors) {
-            double score = evaluate(neighbor);
-            if (score < bestScore) { // Assuming lower score is better
-                current = neighbor;
-                bestScore = score;
-                improved = true;
-                break;
-            }
+//Method to execute the local search algorithm
+void LocalSearch::run() {
+    neighbors.clear();
+    iterations = 0;
+    int size = costMatrix.size();
+    for (int j = 0; j < size; ++j) {
+        ++iterations;
+        if (j != node && costMatrix[node][j] < INF) {
+            neighbors.push_back(j);
         }
     }
-
-    return current;
 }
+
+// Method to return the neighbors found during the local search
+const std::vector<int>& LocalSearch::getNeighbors() const {
+    return neighbors;
+}
+

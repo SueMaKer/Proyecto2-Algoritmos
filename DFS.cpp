@@ -1,26 +1,39 @@
 #include "DFS.hpp"
 
-//Constructor of the DFS class that initializes the graph.
-DFS::DFS(const Graph& g) : graph(g) {}
+//Constructor for the DFS class
+DFS::DFS(const std::vector<std::vector<int>>& matrix, int infinityValue)
+    : adjacencyMatrix(matrix), INF(infinityValue), iterations(0) {}
 
-// Runs the DFS algorithm starting from a given node and explores up to a specified depth.
-std::set<std::string> DFS::run(const std::string& startNode, int maxDepth) {
-    std::set<std::string> visited;
-    dfsHelper(startNode, 0, maxDepth, visited);
-    return visited;
+// Runs the DFS algorithm starting from the specified node
+void DFS::run(int startNode) {
+    int n = adjacencyMatrix.size(); // Get the size of the adjacency matrix
+    visited.assign(n, false);
+    reachableNodes.clear();
+    iterations = 0;
+    dfs(startNode);
 }
 
-// Helper function for the DFS algorithm that recursively explores the graph.
-void DFS::dfsHelper(const std::string& current, int depth, int maxDepth, std::set<std::string>& visited) {
-    if (depth > maxDepth || visited.count(current)) return;
+// Recursive DFS function that explores the graph
+void DFS::dfs(int node) {
+    visited[node] = true;
+    reachableNodes.push_back(node);
+    ++iterations;
 
-    visited.insert(current);
-
-    auto it = graph.find(current);
-    if (it != graph.end()) {
-        for (const auto& neighbor : it->second) {
-            dfsHelper(neighbor, depth + 1, maxDepth, visited);
+    for (int neighbor = 0; neighbor < adjacencyMatrix.size(); ++neighbor) {
+        if (!visited[neighbor] && adjacencyMatrix[node][neighbor] < INF) {
+            dfs(neighbor);
         }
     }
 }
+
+// Returns a constant reference to the list of reachable nodes
+const std::vector<int>& DFS::getReachableNodes() const {
+    return reachableNodes;
+}
+
+// Returns the number of iterations performed during the DFS
+int DFS::getIterationCount() const {
+    return iterations;
+}
+
 

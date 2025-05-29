@@ -1,21 +1,26 @@
 #ifndef DFS_HPP
 #define DFS_HPP
 
-#include <string>
-#include <unordered_map>
 #include <vector>
-#include <set>
 
 class DFS {
-public:
-    using Graph = std::unordered_map<std::string, std::vector<std::string>>;
-    
-    DFS(const Graph& graph);
-    std::set<std::string> run(const std::string& startNode, int maxDepth = 3);
-
 private:
-    const Graph& graph;
-    void dfsHelper(const std::string& current, int depth, int maxDepth, std::set<std::string>& visited);
+    const std::vector<std::vector<int>>& adjacencyMatrix;
+    std::vector<bool> visited;
+    std::vector<int> reachableNodes;
+    int iterations;
+    int INF;
+
+    void dfs(int node); // Declaration of the recursive DFS function
+
+public:
+    DFS(const std::vector<std::vector<int>>& matrix, int infinityValue = 1e9);
+
+    void run(int startNode);
+
+    const std::vector<int>& getReachableNodes() const;
+
+    int getIterationCount() const;
 };
 
 #endif
