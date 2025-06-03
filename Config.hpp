@@ -15,12 +15,13 @@ namespace Config {
 
     constexpr int DEFAULT_LYNK_PROBABILITY = 3;
 
+    const int INF = 1e9;
     
    
     
-    GREEDY_SEARCH_COST
+    /* GREEDY_SEARCH_COST
     MINE_YIELD 
-    BASE_DAMAGE
+    BASE_DAMAGE */
 }
 
 #endif
