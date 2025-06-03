@@ -6,6 +6,9 @@
 #include "ExhaustiveSearch.hpp"
 #include "Ship.hpp"
 #include "StarMapper.hpp"
+#include "DFS.hpp"
+#include "LocalSearch.hpp"
+#include "DeepProbe.hpp"
 // #include "OtraClase.hpp" // por ejemplo
 const int INF = 1e9; // Para evitar overflow
 
@@ -18,6 +21,9 @@ public:
         testExhaustiveSearchWithPruning();
         testStarMapper();
         testStarMapperUpdateMatrix();
+        testDFS();
+        testLocalSearch();
+        testDeepProbe();
         // testOtraClase();
         cout << "All tests have passed successfully.\n";
     }
@@ -170,7 +176,99 @@ private:
 
         cout << "StarMapper matrix update test passed!" << endl;
     }
+
+    void testDFS() {
+        // Matriz de adyacencia de un grafo simple
+        // 0 -> 1, 0 -> 2, 1 -> 3
+        std::vector<std::vector<int>> graph = {
+            {0, 1, 1, Config::INF},   // Nodo 0
+            {1, 0, Config::INF, 1},   // Nodo 1
+            {1, Config::INF, 0, Config::INF}, // Nodo 2
+            {Config::INF, 1, Config::INF, 0}  // Nodo 3
+        };
+
+        DFS dfs(graph);
+        dfs.run(0); // Iniciar DFS desde el nodo 0
+
+        const auto& reachable = dfs.getReachableNodes();
+        int iterations = dfs.getIterationCount();
+
+        std::cout << "Reachable nodes from node 0: ";
+        for (int node : reachable) {
+            std::cout << node << " ";
+        }
+        std::cout << "\nTotal iterations: " << iterations << std::endl;
+
+        // Verificación simple
+        std::vector<int> expected = {0, 1, 3, 2}; // el orden puede variar dependiendo del grafo
+        if (reachable.size() == expected.size()) {
+            std::cout << "Test passed!" << std::endl;
+        } else {
+            std::cout << "Test failed!" << std::endl;
+        }
+    }
+
+    void testLocalSearch() {
+        // Matriz de adyacencia/costos:
+        // Nodo 0 conectado con 1 y 2
+        std::vector<std::vector<int>> graph = {
+            {0, 5, 10, Config::INF},
+            {5, 0, Config::INF, Config::INF},
+            {10, Config::INF, 0, 3},
+            {Config::INF, Config::INF, 3, 0}
+        };
+
+        int nodeToTest = 0;
+        LocalSearch ls(graph, nodeToTest);
+        ls.run();
+
+        const auto& neighbors = ls.getNeighbors();
+
+        std::cout << "Neighbors of node " << nodeToTest << ": ";
+        for (int n : neighbors) {
+            std::cout << n << " ";
+        }
+        std::cout << std::endl;
+
+        // Resultado esperado: nodos 1 y 2
+        std::vector<int> expected = {1, 2};
+        
+        // Comparación sin importar el orden
+        std::vector<int> sortedNeighbors = neighbors;
+        std::sort(sortedNeighbors.begin(), sortedNeighbors.end());
+        std::sort(expected.begin(), expected.end());
+
+        if (sortedNeighbors == expected) {
+            std::cout << "Test passed!" << std::endl;
+        } else {
+            std::cout << "Test failed!" << std::endl;
+        }
+    }
+
+    void testDeepProbe() {
+        std::vector<std::vector<int>> graph = {
+            {0, 1, Config::INF, Config::INF, Config::INF},
+            {1, 0, 1, Config::INF, Config::INF},
+            {Config::INF, 1, 0, 1, Config::INF},
+            {Config::INF, Config::INF, 1, 0, 1},
+            {Config::INF, Config::INF, Config::INF, 1, 0}
+        };
+
+        DeepProbe probe(graph, 3);  // profundidad máxima de 3 saltos
+
+        std::cout << "Test: Camino de 0 a 4 (esperado: existe en 3 saltos)\n";
+        probe.probe(0, 4);
+
+        std::cout << "\nTest: Camino de 0 a 2 (esperado: existe en 2 saltos)\n";
+        probe.probe(0, 2);
+
+        std::cout << "\nTest: Camino de 0 a 4 con profundidad insuficiente (máx 2 saltos, esperado: no encontrado)\n";
+        DeepProbe shallowProbe(graph, 2);  // profundidad insuficiente
+        shallowProbe.probe(0, 4);
+    }
+
 };
+
 
 int main() {
     Test testSuite;

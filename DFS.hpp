@@ -21,6 +21,8 @@ public:
     const std::vector<int>& getReachableNodes() const;
 
     int getIterationCount() const;
+
+    int getInfinity() const;
 };
 
 #endif

@@ -36,4 +36,9 @@ int DFS::getIterationCount() const {
     return iterations;
 }
 
+int DFS::getInfinity() const {
+    return INF;
+}
+
+// End of DFS.cpp
 
