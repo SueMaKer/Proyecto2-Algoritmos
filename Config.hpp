@@ -15,13 +15,12 @@ namespace Config {
 
     constexpr int DEFAULT_LYNK_PROBABILITY = 3;
 
-    //Exhaustive Search
-    constexpr int SEARCH_WITH_PRUNING = true;
-    constexpr int SEARCH_WITHOUT_PRUNING = false;
-
-    //FloydWarshall
-    const int INF = 1e9;
     
+   
+    
+    GREEDY_SEARCH_COST
+    MINE_YIELD 
+    BASE_DAMAGE
 }
 
 #endif
