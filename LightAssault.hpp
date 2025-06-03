@@ -7,11 +7,12 @@
 
 class LightAssault {
 public:
-    LightAssault(const std::unordered_map<int, std::vector<std::pair<int,int>>>& graph);
-    std::vector<int> findGreedyAttackPath(int startNode, int endNode);
+    LightAssault(const std::unordered_map<int, std::vector<std::pair<int, int>>>& graph);
+    std::vector<int> findGreedyAttackPath(int start, int goal);
+    //int findGreedyAttackPath(int startNode, int endNode, std::vector<int>& path);
 
 private:
-    const std::unordered_map<int, std::vector<std::pair<int,int>>>& graph_;
+    std::unordered_map<int, std::vector<std::pair<int, int>>> graph;
 };
 
-#endif
+#endif // LIGHTASSAULT_HPP

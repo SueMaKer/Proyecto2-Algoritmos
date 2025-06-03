@@ -1,15 +1,12 @@
 #include "RapidSight.hpp"
 
-RapidSight::RapidSight(const std::unordered_map<int, std::vector<std::pair<int,int>>>& graph)
-    : graph_(graph) {}
+RapidSight::RapidSight(const std::unordered_map<int, std::vector<std::pair<int, int>>>& graph)
+    : graph(graph) {}
 
-std::vector<int> RapidSight::getNeighbors(int startNode) {
-    std::vector<int> neighbors;
-    auto it = graph_.find(startNode);
-    if (it != graph_.end()) {
-        for (const auto& [neighbor, cost] : it->second) {
-            neighbors.push_back(neighbor);
-        }
+std::vector<std::pair<int, int>> RapidSight::getNeighbors(int node) const {
+    auto it = graph.find(node);
+    if (it != graph.end()) {
+        return it->second;
     }
-    return neighbors;
+    return {}; // return empty vector if node not found
 }

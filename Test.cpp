@@ -1,11 +1,16 @@
 #include <cassert>
 #include <algorithm>
 #include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <utility>
 #include "FloydWarshall.hpp"
 #include "Graph.hpp"
 #include "ExhaustiveSearch.hpp"
 #include "Ship.hpp"
 #include "StarMapper.hpp"
+#include "Pathfinder.hpp"
+
 // #include "OtraClase.hpp" // por ejemplo
 const int INF = 1e9; // Para evitar overflow
 
@@ -170,6 +175,29 @@ private:
 
         cout << "StarMapper matrix update test passed!" << endl;
     }
+    void testPathfinderWithAssert() {
+    std::unordered_map<int, std::vector<std::pair<int, int>>> graph = {
+        {0, {{1, 3}, {2, 5}}},
+        {1, {{0, 3}, {2, 2}, {3, 4}}},
+        {2, {{0, 5}, {1, 2}, {4, 6}}},
+        {3, {{1, 4}, {4, 1}}},
+        {4, {{2, 6}, {3, 1}}}
+    };
+
+    Pathfinder pathfinder(graph);
+
+    int source = 0;
+    int target = 4;
+    int expectedCost = 3 + 2 + 6; // 0 -> 1 -> 2 -> 4 = 11 (ajustá si tu implementación calcula diferente)
+
+    int actualCost = pathfinder.findShortestPathCost(source, target);
+
+    std::cout << "Testing Pathfinder from " << source << " to " << target << "...\n";
+    std::cout << "Expected cost: " << expectedCost << ", Actual cost: " << actualCost << "\n";
+
+    assert(actualCost == expectedCost && "Error: Coste incorrecto en Pathfinder.");
+    std::cout << "✅ Pathfinder test passed.\n\n";
+}
 };
 
 int main() {
