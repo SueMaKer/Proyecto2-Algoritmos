@@ -19,7 +19,7 @@ void DFS::dfs(int node) {
     reachableNodes.push_back(node);
     ++iterations;
 
-    for (int neighbor = 0; neighbor < adjacencyMatrix.size(); ++neighbor) {
+    for (int neighbor = 0; neighbor < adjacencyMatrix.size(); ++neighbor) { // Iterate through all neighbors
         if (!visited[neighbor] && adjacencyMatrix[node][neighbor] < INF) {
             dfs(neighbor);
         }

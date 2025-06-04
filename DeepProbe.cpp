@@ -30,7 +30,7 @@ void DeepProbe::probe(int start, int end) {
     const std::vector<int>& reachable = dfs.getReachableNodes();
 
     if (std::find(reachable.begin(), reachable.end(), end) == reachable.end()) {
-        std::cout << "Nodo " << end << " no es alcanzable desde " << start << ".\n";
+        std::cout << "Node " << end << " is not reachable from " << start << ".\n";
         return;
     }
 
@@ -38,14 +38,14 @@ void DeepProbe::probe(int start, int end) {
     std::vector<int> path;
     std::vector<bool> visited(graph.size(), false);
 
-    dfsLimited(start, end, 0, visited, path, allPaths);
+    dfsLimited(start, end, -1, visited, path, allPaths);
 
     if (allPaths.empty()) {
-        std::cout << "No se encontraron caminos de " << start << " a " << end
-                  << " con profundidad máxima de " << maxDepth << ".\n";
+        std::cout << "No paths found from " << start << " to " << end
+                  << " within the maximum depth of " << maxDepth << ".\n";
     } else {
-        std::cout << "Caminos encontrados de " << start << " a " << end
-                  << " (profundidad ≤ " << maxDepth << "):\n";
+        std::cout << "Paths found from " << start << " to " << end
+                  << " (depth ≤ " << maxDepth << "):\n";
         for (const auto& p : allPaths) {
             for (size_t i = 0; i < p.size(); ++i) {
                 std::cout << p[i];
@@ -53,9 +53,28 @@ void DeepProbe::probe(int start, int end) {
             }
             std::cout << "\n";
         }
-        std::cout << "Iteraciones DFS base: " << dfs.getIterationCount() << "\n";
+        std::cout << "Base DFS iterations: " << dfs.getIterationCount() << "\n";
     }
+
+
 }
+
+std::vector<std::vector<int>> DeepProbe::getAllPaths(int start, int end) {
+    dfs.run(start);
+    const std::vector<int>& reachable = dfs.getReachableNodes();
+
+    std::vector<std::vector<int>> allPaths;
+    if (std::find(reachable.begin(), reachable.end(), end) == reachable.end()) {
+        return allPaths;  // vacío
+    }
+
+    std::vector<bool> visited(graph.size(), false);
+    std::vector<int> path;
+
+    dfsLimited(start, end, -1, visited, path, allPaths);
+    return allPaths;
+}
+
 
 // End of DeepProbe.cpp
 

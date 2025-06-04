@@ -9,6 +9,7 @@
 #include "DFS.hpp"
 #include "LocalSearch.hpp"
 #include "DeepProbe.hpp"
+#include "MediumAssault.hpp"
 // #include "OtraClase.hpp" // por ejemplo
 const int INF = 1e9; // Para evitar overflow
 
@@ -24,6 +25,7 @@ public:
         testDFS();
         testLocalSearch();
         testDeepProbe();
+        testMediumAssault();
         // testOtraClase();
         cout << "All tests have passed successfully.\n";
     }
@@ -254,17 +256,97 @@ private:
             {Config::INF, Config::INF, Config::INF, 1, 0}
         };
 
-        DeepProbe probe(graph, 3);  // profundidad máxima de 3 saltos
+        DeepProbe probe(graph, 3);  // maximum depth of 3 hops
 
-        std::cout << "Test: Camino de 0 a 4 (esperado: existe en 3 saltos)\n";
+        std::cout << "Test: Path from 0 to 4 (expected: exists within 3 hops)\n";
         probe.probe(0, 4);
 
-        std::cout << "\nTest: Camino de 0 a 2 (esperado: existe en 2 saltos)\n";
+        std::cout << "\nTest: Path from 0 to 2 (expected: exists within 2 hops)\n";
         probe.probe(0, 2);
 
-        std::cout << "\nTest: Camino de 0 a 4 con profundidad insuficiente (máx 2 saltos, esperado: no encontrado)\n";
-        DeepProbe shallowProbe(graph, 2);  // profundidad insuficiente
+        std::cout << "\nTest: Path from 0 to 4 with insufficient depth (max 2 hops, expected: not found)\n";
+        DeepProbe shallowProbe(graph, 2);  // insufficient depth
         shallowProbe.probe(0, 4);
+    }
+
+    void testMediumAssault() {
+        std::vector<std::vector<int>> graph = {
+            //  0   1   2   3   4
+            {  0, 10,  3,  Config::INF, Config::INF }, // 0
+            { 10,  0,  1,  2,  Config::INF },          // 1
+            { 3,   1,  0,  8,  2 },                    // 2
+            { Config::INF, 2,  8,  0,  7 },            // 3
+            { Config::INF, Config::INF, 2,  7,  0 }    // 4
+        };
+
+        MediumAssault assault(graph, 4);
+        DeepProbe probe(graph, 4);
+
+        std::cout << "\n==== Test: Medium Assault Path Optimization ====\n";
+        std::cout << "Finding all paths from 0 to 4...\n";
+
+        std::vector<std::vector<int>> allPaths = probe.getAllPaths(0, 4);
+        if (allPaths.empty()) {
+            std::cout << "No paths found from 0 to 4.\n";
+            return;
+        }
+
+        // Show all paths found
+        std::cout << "\nAvailable paths:\n";
+        for (const auto& path : allPaths) {
+            for (size_t i = 0; i < path.size(); ++i) {
+                std::cout << path[i];
+                if (i < path.size() - 1) std::cout << " -> ";
+            }
+            std::cout << "\n";
+        }
+
+        // Get the best initial path without optimization
+        std::vector<int> bestInitialPath = allPaths[0];
+        int bestInitialCost = assault.calculatePathCost(bestInitialPath);
+        for (const auto& path : allPaths) {
+            int cost = assault.calculatePathCost(path);
+            if (cost < bestInitialCost) {
+                bestInitialPath = path;
+                bestInitialCost = cost;
+            }
+        }
+
+        std::cout << "\nBest initial path (before 2-opt): ";
+        for (size_t i = 0; i < bestInitialPath.size(); ++i) {
+            std::cout << bestInitialPath[i];
+            if (i < bestInitialPath.size() - 1) std::cout << " -> ";
+        }
+        std::cout << " (cost = " << bestInitialCost << ")\n";
+
+        // Applying 2-opt optimization
+        std::vector<int> optimizedPath = bestInitialPath;
+        int optimizedCost = bestInitialCost;
+        bool improved = true;
+
+        while (improved) {
+            improved = false;
+            for (size_t i = 1; i < optimizedPath.size() - 2; ++i) {
+                for (size_t k = i + 1; k < optimizedPath.size() - 1; ++k) {
+                    std::vector<int> swapped = assault.twoOptSwap(optimizedPath, i, k);
+                    int cost = assault.calculatePathCost(swapped);
+                    if (cost < optimizedCost) {
+                        optimizedPath = swapped;
+                        optimizedCost = cost;
+                        improved = true;
+                    }
+                }
+            }
+        }
+
+        std::cout << "Optimized path after 2-opt: ";
+        for (size_t i = 0; i < optimizedPath.size(); ++i) {
+            std::cout << optimizedPath[i];
+            if (i < optimizedPath.size() - 1) std::cout << " -> ";
+        }
+        std::cout << " (cost = " << optimizedCost << ")\n";
+
+        std::cout << "===== End of Test =====\n";
     }
 
 };
