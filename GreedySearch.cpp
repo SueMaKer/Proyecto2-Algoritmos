@@ -2,20 +2,27 @@
 #include <unordered_set>
 #include <limits>
 
-GreedySearch::GreedySearch(const std::unordered_map<int, std::vector<std::pair<int, int>>>& graph)
+using namespace std;
+using namespace std::chrono;
+
+GreedySearch::GreedySearch(const unordered_map<int, vector<pair<int, int>>>& graph)
     : graph(graph) {}
 
 std::vector<int> GreedySearch::findPath(int start, int target) {
-    std::unordered_set<int> visited;
-    std::vector<int> path;
+    unordered_set<int> visited;
+    vector<int> path;
     int current = start;
+    iterations = 0;
+
+    auto startTime = high_resolution_clock::now();
 
     while (current != target) {
         path.push_back(current);
         visited.insert(current);
+        ++iterations;
 
         const auto& neighbors = graph[current];
-        int minCost = std::numeric_limits<int>::max();
+        int minCost = numeric_limits<int>::max();
         int nextNode = -1;
 
         for (const auto& neighbor : neighbors) {
@@ -29,13 +36,25 @@ std::vector<int> GreedySearch::findPath(int start, int target) {
         }
 
         if (nextNode == -1) {
-            // No valid path found
-            return {};
+            durationMs = duration<double, std::milli>(high_resolution_clock::now() - startTime).count();
+            return {}; // No se encontró ruta
         }
 
         current = nextNode;
     }
 
     path.push_back(target);
+
+    auto endTime = high_resolution_clock::now();
+    durationMs = duration<double, std::milli>(endTime - startTime).count();
+
     return path;
+}
+
+int GreedySearch::getIterationCount() const {
+    return iterations;
+}
+
+double GreedySearch::getElapsedTimeMs() const {
+    return durationMs;
 }

@@ -8,24 +8,39 @@ std::vector<int> BFS::getNeighbors(int startNode) {
     std::unordered_set<int> visited;
     std::queue<int> queue;
 
+    iterations = 0; // Reset
     visited.insert(startNode);
     queue.push(startNode);
 
     while (!queue.empty()) {
         int current = queue.front();
         queue.pop();
+        ++iterations;
 
         for (int neighbor : graph[current]) {
             if (visited.find(neighbor) == visited.end()) {
                 visited.insert(neighbor);
                 neighbors.push_back(neighbor);
-                queue.push(neighbor); // Continue exploring deeper
+                queue.push(neighbor);
             }
         }
     }
 
     return neighbors;
 }
-// This BFS implementation returns all reachable neighbors from the start node
-// in a breadth-first manner, exploring all nodes at the present depth prior to moving on to nodes at the next depth level.
-// It uses a queue to manage the nodes to explore and a set to track visited nodes,
+
+std::vector<int> BFS::getNeighborsWithTimer(int startNode) {
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<int> result = getNeighbors(startNode);
+    auto end = std::chrono::high_resolution_clock::now();
+    elapsedTimeMs = std::chrono::duration<double, std::milli>(end - start).count();
+    return result;
+}
+
+int BFS::getIterationCount() const {
+    return iterations;
+}
+
+double BFS::getElapsedTimeMs() const {
+    return elapsedTimeMs;
+}

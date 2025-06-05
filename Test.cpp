@@ -10,9 +10,13 @@
 #include "Ship.hpp"
 #include "StarMapper.hpp"
 #include "Pathfinder.hpp"
+#include "Dijkstra.hpp"
+#include "BFS.hpp"
+#include "GreedySearch.hpp"
+#include <iomanip>
 
-// #include "OtraClase.hpp" // por ejemplo
-const int INF = 1e9; // Para evitar overflow
+
+const int INF = 1e9; //evitar overflow
 
 class Test {
 public:
@@ -23,7 +27,12 @@ public:
         testExhaustiveSearchWithPruning();
         testStarMapper();
         testStarMapperUpdateMatrix();
-        // testOtraClase();
+        testBFS();
+        testDijkstra();
+        testGreedySearch();
+        
+
+        
         cout << "All tests have passed successfully.\n";
     }
 
@@ -79,35 +88,51 @@ private:
     }
 
     void testExhaustiveSearchWithPruning() {
-        Graph g(4);
-        g.addEdge(0, 1, 1);
-        g.addEdge(1, 2, 1);
-        g.addEdge(2, 3, 1);
-        g.addEdge(0, 3, 10);  // camino directo, más caro
+    using namespace std;
+    using namespace std::chrono;
 
-        ExhaustiveSearch noPrune(g, false);  // sin poda
-        int cost1 = noPrune.findMinimumPath(0, 3);
-        int iterations1 = noPrune.getIterationCount();
-        assert(cost1 == 3);
+    Graph g(4);
+    g.addEdge(0, 1, 1);
+    g.addEdge(1, 2, 1);
+    g.addEdge(2, 3, 1);
+    g.addEdge(0, 3, 10);  // camino directo, más caro
 
-        ExhaustiveSearch withPrune(g, true);  // con poda
-        int cost2 = withPrune.findMinimumPath(0, 3);
-        int iterations2 = withPrune.getIterationCount();
-        assert(cost2 == 3);
+    // Sin poda
+    ExhaustiveSearch noPrune(g, false);
+    auto start1 = high_resolution_clock::now();
+    int cost1 = noPrune.findMinimumPath(0, 3);
+    auto end1 = high_resolution_clock::now();
+    int iterations1 = noPrune.getIterationCount();
+    auto duration1 = duration_cast<microseconds>(end1 - start1).count();
 
-        std::cout << "Test - Cost without pruning: " << cost1 << "\n";
-        std::cout << "Test - Iterations without pruning: " << iterations1 << "\n";
-        std::cout << "Test - Cost with pruning: " << cost2 << "\n";
-        std::cout << "Test - Iterations with pruning: " << iterations2 << "\n";
+    
+    ExhaustiveSearch withPrune(g, true);
+    auto start2 = high_resolution_clock::now();
+    int cost2 = withPrune.findMinimumPath(0, 3);
+    auto end2 = high_resolution_clock::now();
+    int iterations2 = withPrune.getIterationCount();
+    auto duration2 = duration_cast<microseconds>(end2 - start2).count();
 
-        assert(iterations2 < iterations1);  // poda debería reducir iteraciones
-        std::cout << "Test passed: pruning reduces iterations.\n";
-    }
+    assert(cost1 == 3);
+    assert(cost2 == 3);
+
+    cout << "Test - Cost without pruning: " << cost1 << "\n";
+    cout << "Test - Iterations without pruning: " << iterations1 << "\n";
+    cout << "Test - Time without pruning (microseconds): " << duration1 << "\n";
+
+    cout << "Test - Cost with pruning: " << cost2 << "\n";
+    cout << "Test - Iterations with pruning: " << iterations2 << "\n";
+    cout << "Test - Time with pruning (microseconds): " << duration2 << "\n";
+
+    assert(iterations2 < iterations1);  // poda debería reducir iteraciones
+    cout << "Test passed: pruning reduces iterations.\n";
+}
+
     
     void testStarMapper() {
         using namespace std;
 
-        // Definimos una matriz de costes (INF = 1e9)
+        // Define na matriz de costes (INF = 1e9)
         vector<vector<int>> costMatrix = {
             {0, 3, Config::INF, 7},
             {8, 0, 2, Config::INF},
@@ -196,7 +221,105 @@ private:
     std::cout << "Expected cost: " << expectedCost << ", Actual cost: " << actualCost << "\n";
 
     assert(actualCost == expectedCost && "Error: Coste incorrecto en Pathfinder.");
-    std::cout << "✅ Pathfinder test passed.\n\n";
+    std::cout << " Pathfinder test passed.\n\n";
+}
+
+    void testBFS() {
+    // Grafo de prueba:
+    // 0 -> 1, 0 -> 2
+    // 1 -> 3
+    std::unordered_map<int, std::vector<int>> graph = {
+        {0, {1, 2}},
+        {1, {0, 3}},
+        {2, {0}},
+        {3, {1}}
+    };
+
+    BFS bfs(graph);
+    std::vector<int> neighbors = bfs.getNeighborsWithTimer(0);
+
+    std::cout << "Neighbors of node 0: ";
+    for (int n : neighbors) {
+        std::cout << n << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Iterations: " << bfs.getIterationCount() << std::endl;
+    std::cout << "Duration: " << std::fixed << std::setprecision(3)
+              << bfs.getElapsedTimeMs() << " ms" << std::endl;
+
+    // Vecinos esperados (orden no importa): 1, 2, 3
+    std::vector<int> expected = {1, 2, 3};
+
+    std::sort(neighbors.begin(), neighbors.end());
+    std::sort(expected.begin(), expected.end());
+
+    if (neighbors == expected) {
+        std::cout << "BFS test passed!" << std::endl;
+    } else {
+        std::cout << "BFS test failed!" << std::endl;
+    }
+}
+
+    void testDijkstra() {
+        std::unordered_map<int, std::vector<std::pair<int, int>>> graph = {
+            {0, {{1, 4}, {2, 1}}},
+            {1, {{3, 1}}},
+            {2, {{1, 2}, {3, 5}}},
+            {3, {}}
+        };
+
+        int start = 0;
+        int end = 3;
+
+        int cost = dijkstraShortestPathCost(graph, start, end);
+        std::vector<int> path = dijkstraShortestPath(graph, start, end);
+
+        std::cout << "Test Dijkstra - Shortest path from " << start << " to " << end << ":\n";
+        std::cout << "Expected cost: 6\n";
+        std::cout << "Actual cost: " << cost << "\n";
+
+        std::cout << "Path: ";
+        for (int node : path) std::cout << node << " ";
+        std::cout << "\n";
+
+        std::cout << "Iterations: " << getDijkstraIterationCount() << "\n";
+        std::cout << "Duration: " << std::fixed << std::setprecision(3)
+                  << getDijkstraDurationMs() << " ms\n";
+
+        // Verificación de valores esperados
+        assert(cost == 4);  // Camino óptimo: 0 -> 2 -> 1 -> 3
+        std::vector<int> expectedPath = {0, 2, 1, 3};
+        assert(path == expectedPath);
+
+        std::cout << "Dijkstra test passed!\n";
+    }
+        void testGreedySearch() {
+    std::unordered_map<int, std::vector<std::pair<int, int>>> graph = {
+        {0, {{1, 2}, {2, 5}}},
+        {1, {{0, 2}, {2, 1}, {3, 7}}},
+        {2, {{0, 5}, {1, 1}, {3, 1}}},
+        {3, {{1, 7}, {2, 1}}}
+    };
+
+    GreedySearch greedy(graph);
+    std::vector<int> path = greedy.findPath(0, 3);
+
+    std::cout << "Test Greedy Search - Path from 0 to 3:\n";
+    std::cout << "Path: ";
+    for (int node : path) {
+        std::cout << node << " ";
+    }
+    std::cout << "\nIterations: " << greedy.getIterationCount() << std::endl;
+    std::cout << "Duration: " << std::fixed << std::setprecision(3)
+              << greedy.getElapsedTimeMs() << " ms" << std::endl;
+
+    // Validar que llegó al destino
+    if (!path.empty() && path.front() == 0 && path.back() == 3) {
+        std::cout << "Greedy Search test passed!\n";
+    } else {
+        std::cout << "Greedy Search test failed!\n";
+    }
 }
 };
 

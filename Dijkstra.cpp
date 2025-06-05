@@ -4,11 +4,28 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
+#include <chrono>
+
+// Variables estáticas internas
+static int iterationCount = 0;
+static double durationMs = 0.0;
+
+int getDijkstraIterationCount() {
+    return iterationCount;
+}
+
+double getDijkstraDurationMs() {
+    return durationMs;
+}
 
 int dijkstraShortestPathCost(
     const std::unordered_map<int, std::vector<std::pair<int, int>>>& graph,
     int start, int end
 ) {
+    using namespace std::chrono;
+    auto startTime = high_resolution_clock::now();
+    iterationCount = 0;
+
     std::unordered_map<int, int> distance;
     for (const auto& [node, _] : graph) {
         distance[node] = std::numeric_limits<int>::max();
@@ -20,10 +37,11 @@ int dijkstraShortestPathCost(
     pq.push({0, start});
 
     while (!pq.empty()) {
+        ++iterationCount;
         auto [currentCost, node] = pq.top();
         pq.pop();
 
-        if (node == end) return currentCost;
+        if (node == end) break;
 
         for (const auto& [neighbor, weight] : graph.at(node)) {
             int newCost = currentCost + weight;
@@ -34,13 +52,20 @@ int dijkstraShortestPathCost(
         }
     }
 
-    return -1; // No path found
+    auto endTime = high_resolution_clock::now();
+    durationMs = duration_cast<duration<double, std::milli>>(endTime - startTime).count();
+
+    return distance[end] == std::numeric_limits<int>::max() ? -1 : distance[end];
 }
 
 std::vector<int> dijkstraShortestPath(
     const std::unordered_map<int, std::vector<std::pair<int, int>>>& graph,
     int start, int end
 ) {
+    using namespace std::chrono;
+    auto startTime = high_resolution_clock::now();
+    iterationCount = 0;
+
     std::unordered_map<int, int> distance;
     std::unordered_map<int, int> previous;
 
@@ -54,6 +79,7 @@ std::vector<int> dijkstraShortestPath(
     pq.push({0, start});
 
     while (!pq.empty()) {
+        ++iterationCount;
         auto [currentCost, node] = pq.top();
         pq.pop();
 
@@ -67,6 +93,9 @@ std::vector<int> dijkstraShortestPath(
         }
     }
 
+    auto endTime = high_resolution_clock::now();
+    durationMs = duration_cast<duration<double, std::milli>>(endTime - startTime).count();
+
     std::vector<int> path;
     if (distance[end] == std::numeric_limits<int>::max()) return path;
 
@@ -77,5 +106,3 @@ std::vector<int> dijkstraShortestPath(
     std::reverse(path.begin(), path.end());
     return path;
 }
-// This code implements Dijkstra's algorithm to find the shortest path cost and the path itself in a graph.
-// It uses a priority queue to efficiently retrieve the next node with the smallest cost.   

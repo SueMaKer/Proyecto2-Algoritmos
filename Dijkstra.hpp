@@ -16,4 +16,7 @@ std::vector<int> dijkstraShortestPath(
     int start, int end
 );
 
-#endif // DIJKSTRA_HPP
+int getDijkstraIterationCount();
+double getDijkstraDurationMs();
+
+#endif 
