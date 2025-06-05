@@ -190,16 +190,18 @@ private:
         };
 
         DFS dfs(graph);
-        dfs.run(0); // Iniciar DFS desde el nodo 0
+        dfs.runWithTiming(0); // Iniciar DFS desde el nodo 0
 
         const auto& reachable = dfs.getReachableNodes();
         int iterations = dfs.getIterationCount();
+        double duration = dfs.getDuration();
 
         std::cout << "Reachable nodes from node 0: ";
         for (int node : reachable) {
             std::cout << node << " ";
         }
         std::cout << "\nTotal iterations: " << iterations << std::endl;
+        std::cout << "Duration: " << duration << " ms" << std::endl;
 
         // Verificación simple
         std::vector<int> expected = {0, 1, 3, 2}; // el orden puede variar dependiendo del grafo
@@ -222,7 +224,7 @@ private:
 
         int nodeToTest = 0;
         LocalSearch ls(graph, nodeToTest);
-        ls.run();
+        ls.runWithTiming();
 
         const auto& neighbors = ls.getNeighbors();
 
@@ -231,6 +233,9 @@ private:
             std::cout << n << " ";
         }
         std::cout << std::endl;
+
+        std::cout << "Iterations: " << ls.getIterationCount() << std::endl;
+        std::cout << "Duration: " << ls.getDuration() << " ms" << std::endl;
 
         // Resultado esperado: nodos 1 y 2
         std::vector<int> expected = {1, 2};

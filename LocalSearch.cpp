@@ -22,3 +22,21 @@ const std::vector<int>& LocalSearch::getNeighbors() const {
     return neighbors;
 }
 
+// Method to get the number of iterations performed
+int LocalSearch::getIterationCount() const {
+    return iterations;
+}
+
+// Method to get the duration of the local search
+double LocalSearch::getDuration() const {
+    return duration;
+}
+
+// Method to run the local search with timing
+void LocalSearch::runWithTiming() {
+    auto start = std::chrono::high_resolution_clock::now(); // Start timing
+    run();
+    auto end = std::chrono::high_resolution_clock::now(); // End timing
+    duration = std::chrono::duration<double, std::milli>(end - start).count(); 
+}
+
