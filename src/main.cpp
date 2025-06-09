@@ -270,7 +270,7 @@ int main() {
 int main() {
     Universe universe;
     CSVReader reader;
-    if (!reader.loadUniverseFromCSV("Universe.csv", universe)) {
+    if (!reader.loadUniverseFromCSV("data/Universe.csv", universe)) {
         std::cerr << "Error cargando universo.\n";
         return -1;
     }

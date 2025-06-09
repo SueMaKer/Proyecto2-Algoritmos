@@ -7,7 +7,7 @@
 #include "Config.hpp"
 
 Interfaz::Interfaz() : window(sf::VideoMode(1200, 800), "Galaxy Map - Game") {
-    if (!font.loadFromFile("OpenSans_Condensed-Italic.ttf")) {
+    if (!font.loadFromFile("assets/OpenSans_Condensed-Italic.ttf")) {
         std::cerr << "Failed to load font\n";
         exit(1);
     }
