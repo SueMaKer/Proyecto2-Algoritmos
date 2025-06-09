@@ -19,7 +19,7 @@ void DFS::dfs(int node) {
     reachableNodes.push_back(node);
     ++iterations;
 
-    for (int neighbor = 0; neighbor < adjacencyMatrix.size(); ++neighbor) {
+    for (int neighbor = 0; neighbor < adjacencyMatrix.size(); ++neighbor) { // Iterate through all neighbors
         if (!visited[neighbor] && adjacencyMatrix[node][neighbor] < INF) {
             dfs(neighbor);
         }
@@ -36,4 +36,19 @@ int DFS::getIterationCount() const {
     return iterations;
 }
 
+int DFS::getInfinity() const {
+    return INF;
+}
+
+void DFS::runWithTiming(int startNode) {
+    auto start = std::chrono::high_resolution_clock::now(); // Start timing
+    run(startNode);
+    auto end = std::chrono::high_resolution_clock::now(); // End timing
+    duration = std::chrono::duration<double, std::milli>(end - start).count(); // Calculate duration in milliseconds
+}
+double DFS::getDuration() const {
+    return duration; // Return the duration of the DFS run
+}
+
+// End of DFS.cpp
 

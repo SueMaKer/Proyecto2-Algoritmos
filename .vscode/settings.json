@@ -18,6 +18,7 @@
         "cwctype": "cpp",
         "deque": "cpp",
         "map": "cpp",
+ main
         "string": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
@@ -44,17 +45,15 @@
         "new": "cpp",
         "numbers": "cpp",
         "ostream": "cpp",
-        "sstream": "cpp",
+ main
         "stdexcept": "cpp",
-        "streambuf": "cpp",
+        "streambuf": "cpp"
         "typeinfo": "cpp",
         "charconv": "cpp",
         "chrono": "cpp",
         "ratio": "cpp",
         "format": "cpp",
-        "fstream": "cpp",
-        "iomanip": "cpp",
-        "span": "cpp",
+ main
         "variant": "cpp"
     }
 }

@@ -2,6 +2,7 @@
 #define LOCALSEARCH_HPP
 
 #include <vector>
+#include <chrono>
 
 class LocalSearch {
 private:
@@ -10,6 +11,7 @@ private:
     int INF;
     std::vector<int> neighbors;
     int iterations;
+    double duration;
 
 public:
     // Constructor: take the adjacency matrix, the node to analyze, and the value of INF
@@ -20,6 +22,12 @@ public:
 
     // Return the neighbors found
     const std::vector<int>& getNeighbors() const;
+
+    int getIterationCount() const;
+
+    double getDuration () const;
+
+    void runWithTiming();
 };
 
 #endif
