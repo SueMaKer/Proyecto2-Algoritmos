@@ -65,7 +65,7 @@ void Interfaz::updatePlanetsFromSystem() {
     planets.clear();
     auto positions = generatePositions(currentSystem->getPlanetCount(), window.getSize());
 
-    for (int i = 0; i < currentSystem->getPlanetCount(); ++i) {
+    for (size_t i = 0; i < currentSystem->getPlanetCount(); ++i) {
         auto& p = currentSystem->getPlanet(i);
         sf::Color planetColor = sf::Color::Green;
         if (p.getHealth() <= 0) planetColor = sf::Color::Red;
@@ -124,7 +124,7 @@ std::vector<sf::Vector2f> Interfaz::generatePositions(int count, sf::Vector2u si
 void Interfaz::buildMenuOptions() {
     menuOptions.clear();
     mainMenuLabels = {"Activate Probes (BFS/DFS)", "Run Cartographers (Dijkstra/Floyd-Warshall)", "Attack"};
-    for (int i = 0; i < mainMenuLabels.size(); ++i) {
+    for (size_t i = 0; i < mainMenuLabels.size(); ++i) {
         sf::Text t;
         t.setFont(font);
         t.setString(mainMenuLabels[i]);
@@ -158,7 +158,7 @@ void Interfaz::drawSubMenu() {
 
 void Interfaz::handleClick(const sf::Vector2f& pos) {
     if (showSubMenu) {
-        for (int i = 0; i < subMenuOptions.size(); ++i) {
+        for (size_t i = 0; i < subMenuOptions.size(); ++i) {
             if (subMenuOptions[i].getGlobalBounds().contains(pos)) {
                 auto selectedOption = subMenuOptions[i].getString().toAnsiString();
 
@@ -182,7 +182,7 @@ void Interfaz::handleClick(const sf::Vector2f& pos) {
     }
 
     if (showMenu) {
-        for (int i = 0; i < menuOptions.size(); ++i) {
+        for (size_t i = 0; i < menuOptions.size(); ++i) {
             if (menuOptions[i].getGlobalBounds().contains(pos)) {
                 if (i == 0)
                     buildSubMenuOptions({"RapidSight (BFS)", "DeepProbe (DFS)"});
@@ -192,7 +192,7 @@ void Interfaz::handleClick(const sf::Vector2f& pos) {
                     buildSubMenuOptions({"Confirm Attack"});
 
                 subMenuBox.setPosition(menuBox.getPosition() + sf::Vector2f(0, menuBox.getSize().y + 5));
-                for (int j = 0; j < subMenuOptions.size(); ++j)
+                for (size_t j = 0; j < subMenuOptions.size(); ++j)
                     subMenuOptions[j].setPosition(subMenuBox.getPosition() + sf::Vector2f(10, 10 + j * 25));
 
                 showSubMenu = true;
@@ -202,7 +202,7 @@ void Interfaz::handleClick(const sf::Vector2f& pos) {
     }
 
     // Click on discovered planet to show menu
-    for (int i = 0; i < planets.size(); ++i) {
+    for (size_t i = 0; i < planets.size(); ++i) {
         if (!planets[i].discovered) continue;
         sf::Vector2f p = planets[i].position;
         if (std::hypot(pos.x - p.x, pos.y - p.y) < 20.f) {
@@ -210,7 +210,7 @@ void Interfaz::handleClick(const sf::Vector2f& pos) {
             showMenu = true;
             showSubMenu = false;
             menuBox.setPosition(p + sf::Vector2f(30, -10));
-            for (int j = 0; j < menuOptions.size(); ++j)
+            for (size_t j = 0; j < menuOptions.size(); ++j)
                 menuOptions[j].setPosition(menuBox.getPosition() + sf::Vector2f(10, 10 + j * 25));
             return;
         }
@@ -222,7 +222,7 @@ void Interfaz::handleClick(const sf::Vector2f& pos) {
 }
 
 void Interfaz::activateProbesBFS(int planetIndex) {
-    if (!currentSystem || planetIndex < 0 || planetIndex >= planets.size()) return;
+    if (!currentSystem || planetIndex < 0 || planetIndex >= (int)planets.size()) return;
     
     std::queue<int> q;
     std::vector<bool> discovered(planets.size(), false);
@@ -236,7 +236,7 @@ void Interfaz::activateProbesBFS(int planetIndex) {
         q.pop();
         
         // Only reveal planets that are actually connected
-        for (int neighbor = 0; neighbor < planets.size(); ++neighbor) {
+        for (int neighbor = 0; neighbor < (int)planets.size(); ++neighbor) {
             if (currentSystem->getConnectionWeight(current, neighbor) > 0 && 
                 !discovered[neighbor]) {
                 discovered[neighbor] = true;
@@ -254,7 +254,7 @@ void Interfaz::activateProbesBFS(int planetIndex) {
 }
 
 void Interfaz::activateProbesDFS(int planetIndex) {
-    if (!currentSystem || planetIndex < 0 || planetIndex >= planets.size()) return;
+    if (!currentSystem || planetIndex < 0 || planetIndex >= (int)planets.size()) return;
 
     std::vector<bool> visited(planets.size(), false);
     
@@ -262,7 +262,7 @@ void Interfaz::activateProbesDFS(int planetIndex) {
         visited[current] = true;
         
         // Explore connected neighbors
-        for (int neighbor = 0; neighbor < planets.size(); ++neighbor) {
+        for (size_t neighbor = 0; neighbor < planets.size(); ++neighbor) {
             if (currentSystem->getConnectionWeight(current, neighbor) > 0 && 
                 !visited[neighbor]) {
                 planets[neighbor].discovered = true;
@@ -280,11 +280,11 @@ void Interfaz::activateProbesDFS(int planetIndex) {
     updateAdjacencyFromSystem();
 }
 void Interfaz::runDijkstra(int planetIndex) {
-    if (!currentSystem || planetIndex < 0 || planetIndex >= planets.size()) return;
+    if (!currentSystem || planetIndex < 0 || planetIndex >= (int)planets.size()) return;
     
     auto distances = currentSystem->dijkstra(planetIndex);
     
-    for (int i = 0; i < distances.size(); ++i) {
+    for (size_t i = 0; i < distances.size(); ++i) {
         if (distances[i] != Config::INF && i < planets.size()) {
             planets[i].discovered = true;
             currentSystem->getPlanet(i).markVisited();
@@ -294,7 +294,7 @@ void Interfaz::runDijkstra(int planetIndex) {
     updateAdjacencyFromSystem();
     
     // Visualize distances (optional)
-    for (int i = 0; i < distances.size(); ++i) {
+    for (size_t i = 0; i < distances.size(); ++i) {
         if (i < planets.size()) {
             planets[i].name = currentSystem->getPlanet(i).getName() + " (" + 
                              (distances[i] == Config::INF ? "∞" : std::to_string(distances[i])) + ")";
@@ -309,8 +309,8 @@ void Interfaz::runFloydWarshall(int planetIndex) {
     updateAdjacencyFromSystem();
     
     // Update planet names with distances from selected planet
-    if (planetIndex >= 0 && planetIndex < allPairs.size()) {
-        for (int i = 0; i < allPairs[planetIndex].size(); ++i) {
+    if (planetIndex >= 0 && planetIndex < (int)allPairs.size()) {
+        for (size_t i = 0; i < allPairs[planetIndex].size(); ++i) {
             if (i < planets.size()) {
                 planets[i].name = currentSystem->getPlanet(i).getName() + " (" + 
                                  (allPairs[planetIndex][i] == Config::INF ? "∞" : std::to_string(allPairs[planetIndex][i])) + ")";
@@ -320,12 +320,12 @@ void Interfaz::runFloydWarshall(int planetIndex) {
 }
 
 void Interfaz::attackPlanet(int planetIndex) {
-    if (!currentSystem || planetIndex < 0 || planetIndex >= planets.size()) return;
+    if (!currentSystem || planetIndex < 0 || planetIndex >= (int)planets.size()) return;
     
     auto& p = currentSystem->getPlanet(planetIndex);
     p.takeDamage(25);
     
-    if (planetIndex < planets.size()) {
+    if (planetIndex < (int)planets.size()) {
         planets[planetIndex].health = p.getHealth();
         planets[planetIndex].color = (p.getHealth() <= 0) ? sf::Color::Red : 
                                     (p.hasResourceSite() ? sf::Color::Cyan : sf::Color::Green);
@@ -347,8 +347,8 @@ void Interfaz::run() {
         for (auto& star : stars) window.draw(star);
         
         // Draw connections
-        for (int i = 0; i < planets.size(); ++i) {
-            for (int j = i + 1; j < planets.size(); ++j) {
+        for (size_t i = 0; i < planets.size(); ++i) {
+            for (size_t j = i + 1; j < planets.size(); ++j) {
                 if (adjacency[i][j] && planets[i].discovered && planets[j].discovered) {
                     sf::Vertex line[] = {
                         sf::Vertex(planets[i].position, sf::Color(100, 100, 255)),
@@ -360,7 +360,7 @@ void Interfaz::run() {
         }
         
         // Draw planets
-        for (int i = 0; i < planets.size(); ++i) {
+        for (size_t i = 0; i < planets.size(); ++i) {
             const auto& p = planets[i];
             if (!p.discovered) continue;
             

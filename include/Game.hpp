@@ -6,11 +6,11 @@ private:
     int turn;
     
 public:
-    Game(); // Constructor
+    Game(); 
     void start(); 
     void nextTurn();
     void showStatus();
     int getTurn() const;
 };
 
-#endif // GAME_HPP
+#endif 

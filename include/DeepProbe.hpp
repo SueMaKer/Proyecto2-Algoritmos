@@ -6,7 +6,7 @@
 
 class DeepProbe {
 private:
-    const std::vector<std::vector<int>>& graph; // Reference to the adjacency matrix of the graph
+    const std::vector<std::vector<int>>& graph; 
     int maxDepth;
     DFS dfs;
 

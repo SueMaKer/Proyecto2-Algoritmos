@@ -14,13 +14,13 @@ private:
     double duration;
 
 public:
-    // Constructor: take the adjacency matrix, the node to analyze, and the value of INF
+    
     LocalSearch(const std::vector<std::vector<int>>& matrix, int startNode, int infinityValue = 1e9);
 
-    // Excecutes the "local search"
+  
     void run();
 
-    // Return the neighbors found
+
     const std::vector<int>& getNeighbors() const;
 
     int getIterationCount() const;

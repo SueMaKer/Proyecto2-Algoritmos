@@ -29,7 +29,6 @@ bool CSVReader::loadUniverseFromCSV(const std::string& filename, Universe& unive
         std::vector<std::string> tokens;
 
         while (std::getline(ss, token, ',')) {
-            // Trim espacios
             token.erase(token.begin(), std::find_if(token.begin(), token.end(), [](unsigned char ch) {
                 return !std::isspace(ch);
             }));

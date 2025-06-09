@@ -13,7 +13,7 @@ class DFS {
         int INF;
         double duration;
 
-        void dfs(int node); // Declaration of the recursive DFS function
+        void dfs(int node); 
 
     public:
         DFS(const std::vector<std::vector<int>>& matrix, int infinityValue = 1e9);

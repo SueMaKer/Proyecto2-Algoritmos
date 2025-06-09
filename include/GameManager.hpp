@@ -14,5 +14,5 @@ public:
     GameManager();
     bool loadUniverse(const std::string& filename);
     void run();
-    Universe& getUniverse();  // Acceso al universo si lo necesitas desde fuera
+    Universe& getUniverse();  
 };

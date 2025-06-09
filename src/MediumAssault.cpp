@@ -38,7 +38,7 @@ std::vector<int> MediumAssault::findBestPath(const std::vector<std::vector<int>>
         }
     }
 
-    // 2-opt optimization
+    
     bool improved = true;
     while (improved) {
         improved = false;

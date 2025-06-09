@@ -6,9 +6,8 @@ bool GameManager::loadUniverse(const std::string& filename) {
 }
 
 void GameManager::run() {
-    //interfaz.run();            // Lanza el bucle de visualización/interacción
+    //interfaz.run();            
 }
-
 Universe& GameManager::getUniverse() {
     return universe;
 }

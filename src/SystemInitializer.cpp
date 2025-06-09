@@ -9,7 +9,7 @@ void SystemInitializer::generateMatrix(PlanetSystem& system, double removalProba
     std::uniform_int_distribution<int> weightDist(1, 20);
     RandomBoolGenerator remover(removalProbability);
 
-    // Conectar completamente con pesos
+    
     for (size_t i = 0; i < n; ++i) {
         matrix[i][i] = 0;
         for (size_t j = i + 1; j < n; ++j) {
@@ -18,7 +18,7 @@ void SystemInitializer::generateMatrix(PlanetSystem& system, double removalProba
         }
     }
 
-    // Intentar eliminar conexiones al azar
+    
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = i + 1; j < n; ++j) {
             if (matrix[i][j] != Config::INF && remover.get()) {
@@ -26,7 +26,7 @@ void SystemInitializer::generateMatrix(PlanetSystem& system, double removalProba
                 matrix[i][j] = matrix[j][i] = Config::INF;
 
                 if (!isConnected(matrix)) {
-                    matrix[i][j] = matrix[j][i] = temp; // restaurar
+                    matrix[i][j] = matrix[j][i] = temp; 
                 }
             }
         }

@@ -8,7 +8,7 @@ public:
    
     Ship();
    
-    //virtual int executeAttack() = 0;
+    
 
     double calculateEffectiveDamage(int iterations) const;
 

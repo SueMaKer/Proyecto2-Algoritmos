@@ -3,7 +3,7 @@
 
 void Universe::printAll() const {
     for (const auto& system : systems) {
-        system.print(); // suponiendo que PlanetSystem tiene print()
+        system.print(); 
     }
 }
 

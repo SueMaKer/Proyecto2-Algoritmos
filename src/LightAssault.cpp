@@ -21,7 +21,7 @@ std::vector<int> LightAssault::findGreedyAttackPath(int startNode, int endNode) 
             }
         }
 
-        if (nextNode == -1) // no way forward
+        if (nextNode == -1) 
             break;
 
         path.push_back(nextNode);
@@ -29,7 +29,7 @@ std::vector<int> LightAssault::findGreedyAttackPath(int startNode, int endNode) 
     }
 
     if (path.back() != endNode)
-        path.clear(); // no valid path found
+        path.clear(); 
 
     return path;
 }

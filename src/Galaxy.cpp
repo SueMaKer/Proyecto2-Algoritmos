@@ -11,7 +11,7 @@ private:
     std::string name;
     std::string entryPlanetName;
     std::string exitPlanetName;
-    std::unordered_map<std::string, Planet*> planets; // Map planet names to Planet pointers
+    std::unordered_map<std::string, Planet*> planets; 
     float linkProbability;
 
 public:

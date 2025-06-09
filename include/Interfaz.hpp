@@ -25,7 +25,7 @@ private:
     PlanetSystem* currentSystem;
     std::string currentUniverseName;
 
-    // Menu system
+ 
     sf::RectangleShape menuBox;
     sf::RectangleShape subMenuBox;
     std::vector<sf::Text> menuOptions;
@@ -50,7 +50,7 @@ public:
     void handleClick(const sf::Vector2f& pos);
     void run();
 
-    // Action methods
+   
     void activateProbesBFS(int planetIndex);
     void activateProbesDFS(int planetIndex);
     void runDijkstra(int planetIndex);
@@ -58,4 +58,4 @@ public:
     void attackPlanet(int planetIndex);
 };
 
-#endif // INTERFAZ_HPP
+#endif 

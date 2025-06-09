@@ -65,7 +65,7 @@ std::vector<std::vector<int>> DeepProbe::getAllPaths(int start, int end) {
 
     std::vector<std::vector<int>> allPaths;
     if (std::find(reachable.begin(), reachable.end(), end) == reachable.end()) {
-        return allPaths;  // vacío
+        return allPaths;  
     }
 
     std::vector<bool> visited(graph.size(), false);
@@ -76,5 +76,5 @@ std::vector<std::vector<int>> DeepProbe::getAllPaths(int start, int end) {
 }
 
 
-// End of DeepProbe.cpp
+
 

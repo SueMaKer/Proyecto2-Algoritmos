@@ -36,5 +36,5 @@ int Pathfinder::findShortestPathCost(int startNode, int endNode) {
         }
     }
 
-    return -1; // no path found
+    return -1; 
 }
