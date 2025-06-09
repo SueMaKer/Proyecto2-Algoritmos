@@ -11,16 +11,19 @@ private:
     bool hasCombat;
     bool hasResources;
     bool isVisited;
+    int health;
 
     std::vector<Planet*> neighbors;
 
 public:
-    Planet(const std::string& name, const std::string& description, bool combat, bool resources);
+    Planet(const std::string& name, bool combat, bool resources);
     ~Planet();
 
     std::string getName() const;
     std::string getDescription() const;
 
+    int getHealth() const;
+    void takeDamage(int damage);
     bool hasCombatZone() const;
     bool hasResourceSite() const;
 
@@ -30,7 +33,9 @@ public:
     void markVisited();
     bool wasVisited() const;
 
-    void printInfo() const;
+    int setHealth(int health) ;
+
+    void print() const;
 };
 
 #endif // PLANET_HPP
