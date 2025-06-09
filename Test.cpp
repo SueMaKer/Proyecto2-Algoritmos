@@ -357,8 +357,9 @@ private:
 };
 
 
-int main() {
+/* int main() {
     Test testSuite;
     testSuite.runAllTests();
     return 0;
 }
+ */

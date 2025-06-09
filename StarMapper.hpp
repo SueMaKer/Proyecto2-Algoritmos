@@ -19,7 +19,7 @@ public:
     StarMapper(const vector<vector<int>>* adjacencyMatrix, const vector<int>* exploredPlanetsPtr);
     
     void update();
-
+    
     void updateExploredPlanetsPtr(const vector<int>* newPtr);
     void updateRouteCostsMatrixPtr(const vector<vector<int>>* newMatrixPtr);
 
