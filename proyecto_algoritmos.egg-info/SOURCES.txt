@@ -1,0 +1,9 @@
+pyproject.toml
+problemas/asignacion.py
+problemas/distribucion.py
+proyecto_algoritmos.egg-info/PKG-INFO
+proyecto_algoritmos.egg-info/SOURCES.txt
+proyecto_algoritmos.egg-info/dependency_links.txt
+proyecto_algoritmos.egg-info/entry_points.txt
+proyecto_algoritmos.egg-info/requires.txt
+proyecto_algoritmos.egg-info/top_level.txt

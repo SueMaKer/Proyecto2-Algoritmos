@@ -1,0 +1,14 @@
+[project]
+name = "tarea2"
+version = "1.0.0"
+dependencies = ["rich"]
+requires-python = ">=3.10"
+
+[project.scripts]
+tarea2 = "tarea2:main"
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+tarea2 = { path = "src/tarea2" }
