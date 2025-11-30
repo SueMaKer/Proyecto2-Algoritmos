@@ -1,19 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-Implementaciones genéricas de técnicas de búsqueda:
-- Greedy
-- Exhaustiva Pura
-- Ramificación y Acotamiento
-"""
-
 from __future__ import annotations
 import time
 from typing import Any, Protocol
 
 
 class ProblemaBusqueda(Protocol):
-    """Interfaz que deben implementar todos los problemas."""
-
     def solucion_inicial(self) -> Any: ...
     def completo(self, solucion: Any) -> bool: ...
     def candidatos(self, solucion: Any) -> list[Any]: ...
@@ -24,7 +15,6 @@ class ProblemaBusqueda(Protocol):
 
 
 def busqueda_greedy(problema: ProblemaBusqueda):
-    """Estrategia voraz (greedy). Retorna (solucion, valor, tiempo)."""
     inicio = time.perf_counter()
 
     sol = problema.solucion_inicial()
@@ -44,7 +34,6 @@ def busqueda_greedy(problema: ProblemaBusqueda):
 
 
 def busqueda_exhaustiva(problema: ProblemaBusqueda):
-    """Exhaustiva pura por backtracking. Retorna (mejor_sol, mejor_valor, tiempo, evaluadas)."""
     inicio = time.perf_counter()
     mejor_valor = float("-inf")
     mejor_sol = None
@@ -72,7 +61,7 @@ def busqueda_exhaustiva(problema: ProblemaBusqueda):
 
 
 def busqueda_branch_and_bound(problema: ProblemaBusqueda):
-    """Exhaustiva con Ramificación y Acotamiento. Retorna (mejor_sol, mejor_valor, tiempo, evaluadas)."""
+    
     inicio = time.perf_counter()
     mejor_valor = float("-inf")
     mejor_sol = None
