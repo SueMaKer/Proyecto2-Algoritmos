@@ -78,4 +78,4 @@ Incluye validaciones:
 ### 1. Instalar dependencias
 ```bash
 uv sync
-## uv run tarea2
+uv run tarea2
