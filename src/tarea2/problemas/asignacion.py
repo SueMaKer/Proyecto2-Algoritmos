@@ -1,79 +1,49 @@
 # -*- coding: utf-8 -*-
 """
 Problema de Asignación 1 a 1
-Compatible con: Greedy, Exhaustiva, Branch & Bound
+Compatible con la interfaz ProblemaBusqueda
 """
 
-from __future__ import annotations
-
-
 class ProblemaAsignacion:
+
     def __init__(self, matriz):
-        """
-        matriz[i][j] = ganancia si se asigna i -> j
-        i = trabajador, j = tarea
-        """
         self.matriz = matriz
-        self.n = len(matriz)
-
-    # -----------------------
-    # Solución inicial
-    # -----------------------
+        self.N = len(matriz)
+    #  Métodos requeridos por la interfaz
     def solucion_inicial(self):
-        return []  # lista vacía de asignaciones
+        return []
 
-    # -----------------------
-    # ¿Solución completa?
-    # -----------------------
-    def completo(self, sol):
-        return len(sol) == self.n
+    def completo(self, solucion):
+        return len(solucion) == self.N
 
-    # -----------------------
-    # Candidatos
-    # -----------------------
-    def candidatos(self, sol):
-        """
-        candidatos = tareas no asignadas aún
-        """
-        usados = set(sol)
-        return [j for j in range(self.n) if j not in usados]
+    def candidatos(self, solucion):
+        usados = set(solucion)
+        return [j for j in range(self.N) if j not in usados]
 
-    # -----------------------
-    # Factible
-    # -----------------------
-    def factible(self, sol, candidato):
-        return candidato not in sol
+    def factible(self, solucion, candidato):
+        return candidato not in solucion
 
-    # -----------------------
-    # Agregar candidato
-    # sol es una lista donde sol[i] = tarea asignada al trabajador i
-    # -----------------------
-    def agregar(self, sol, candidato):
-        return sol + [candidato]
+    def agregar(self, solucion, candidato):
+        return solucion + [candidato]
 
-    # -----------------------
-    # Evaluación de solución
-    # -----------------------
-    def evaluar(self, sol):
+    def evaluar(self, solucion):
         total = 0
-        for i, j in enumerate(sol):
+        for i, j in enumerate(solucion):
             total += self.matriz[i][j]
         return total
 
-    # -----------------------
-    # Cota superior (Branch & Bound)
-    # -----------------------
-    def cota_superior(self, sol):
-        """
-        Cálculo simple:
-        - suma real de lo asignado
-        - + máximo valor posible para cada trabajador pendiente
-        """
-        suma = self.evaluar(sol)
-        k = len(sol)
+    def cota_superior(self, solucion):
+        usados = set(solucion)
+        valor = self.evaluar(solucion)
 
-        for trabajador in range(k, self.n):
-            max_para_trabajador = max(self.matriz[trabajador])
-            suma += max_para_trabajador
+        fila_actual = len(solucion)
 
-        return suma
+        for i in range(fila_actual, self.N):
+            mejores_no_usados = [
+                self.matriz[i][j]
+                for j in range(self.N)
+                if j not in usados
+            ]
+            valor += max(mejores_no_usados)
+
+        return valor

@@ -4,25 +4,21 @@ Menú principal
 """
 
 from __future__ import annotations
-
 from rich.console import Console
-
+from typing import List
+import math
 
 from .interfaz import panel_contenido, leer_tecla, pausa
 from .problemas.asignacion import ProblemaAsignacion
 from .problemas.distribucion import ProblemaDistribucion
+from .problemas.vendedor import ProblemaVendedor
+from .problemas.mochila import ProblemaMochila
 
 from .algoritmos import (
     busqueda_greedy,
     busqueda_exhaustiva,
     busqueda_branch_and_bound,
 )
-
-# Aquí luego importaremos:
-# from tarea2.problemas.asignacion import ProblemaAsignacion
-# from tarea2.problemas.distribucion import ProblemaDistribucion
-# from tarea2.problemas.mochila import ProblemaMochila
-# from tarea2.problemas.vendedor import ProblemaVendedor
 
 console = Console()
 
@@ -72,58 +68,117 @@ def main() -> None:
         render_menu_problema()
         op = leer_tecla("12345")
         console.print()
+
         if op == "5":
+            console.print("[green]Saliendo del programa...[/]")
             console.clear()
-            break
+            return 
 
         tecnica = seleccionar_tecnica()
 
-    # Aquí, según op, instanciamos el problema correspondiente
-    # (por ahora dejamos placeholders)
-    if op == "1":
-        console.print("[cyan]Ingrese tamaño N de la matriz:[/]")
-        N = int(input("N = "))
-        matriz = []
-        console.print("[cyan]Ingrese la matriz fila por fila (separada por espacios):[/]")
+        if op == "1":
+            console.print("[cyan]Ingrese tamaño N de la matriz:[/]")
+            N = int(input("N = "))
+            matriz = []
+            console.print("[cyan]Ingrese la matriz fila por fila:[/]")
+            for i in range(N):
+                fila = list(map(int, input(f"Fila {i+1}: ").split()))
+                matriz.append(fila)
+            problema = ProblemaAsignacion(matriz)
 
-        for i in range(N):
-            fila = list(map(int, input(f"Fila {i+1}: ").split()))
-            matriz.append(fila)
+        elif op == "2":
+            console.print("[cyan]Ingrese número máximo de unidades asignables (N):[/]")
+            N = int(input("N = "))
+            console.print("[cyan]Ingrese número de elementos (M):[/]")
+            M = int(input("M = "))
 
-        problema = ProblemaAsignacion(matriz)
-        # problema = ProblemaAsignacion(...)
+            tabla = []
+            console.print("[cyan]Ingrese la tabla (N+1) x M:[/]")
+            for i in range(N + 1):
+                fila = list(map(int, input(f"Unidades {i}: ").split()))
+                tabla.append(fila)
 
-    elif op == "2":
-        console.print("[cyan]Ingrese número máximo de unidades asignables (N):[/]")
-        N = int(input("N = "))
+            R = int(input("Recurso total disponible R = "))
+            problema = ProblemaDistribucion(tabla, R)
 
-        console.print("[cyan]Ingrese número de elementos (M):[/]")
-        M = int(input("M = "))
+        elif op == "3":
+            console.print("[cyan]Ingrese número de elementos N:[/]")
+            N = int(input("N = "))
+            beneficios = []
+            for i in range(N):
+                beneficios.append(int(input(f"beneficio[{i}] = ")))
+            C = int(input("Capacidad = "))
+            problema = ProblemaMochila(beneficios, C)
 
-        tabla = []
-        console.print("[cyan]Ingrese la tabla de ganancias de tamaño (N+1) x M:[/]")
+        elif op == "4":
+            console.print("[cyan]Ingrese número de ciudades N:[/]")
+            N = int(input("N = "))
 
-        for i in range(N + 1):
-            fila = list(map(int, input(f"Unidades {i}: ").split()))
-            tabla.append(fila)
+            dist = []
+            console.print("[cyan]Ingrese la matriz de distancias N x N (use 99999 para 'no hay camino'):[/]")
 
-        R = int(input("Recurso total disponible R = "))
+            for i in range(N):
+                while True:
+                    fila_str = input(f"Fila {i+1}: ").strip().split()
 
-        problema = ProblemaDistribucion(tabla, R)
-    elif op == "3":
-        console.print("[yellow]TODO: Instanciar Problema de Mochila[/]")
-    elif op == "4":
-        console.print("[yellow]TODO: Instanciar Problema del Vendedor[/]")
+                    if len(fila_str) != N:
+                        console.print(f"[red]La fila debe contener exactamente {N} valores.[/]")
+                        continue
 
-        # En cuanto tengamos la instancia `problema`, haríamos algo como:
-        # if tecnica == "greedy":
-        #     sol, valor, t = busqueda_greedy(problema)
-        # elif tecnica == "exhaustiva":
-        #     sol, valor, t, evaluadas = busqueda_exhaustiva(problema)
-        # elif tecnica == "branchbound":
-        #     sol, valor, t, evaluadas = busqueda_branch_and_bound(problema)
-        #
-        # Y luego imprimiríamos resultados bonitos.
+                    try:
+                        fila = [float(x) for x in fila_str]
+                    except ValueError:
+                        console.print("[red]Error: Debe ingresar números válidos.[/]")
+                        continue
+
+                    if any(x < 0 for x in fila if x != 99999):
+                        console.print("[red]No se permiten distancias negativas.[/]")
+                        continue
+
+                    if fila[i] != 0:
+                        console.print("[red]Error: dist[i][i] debe ser 0.[/]")
+                        continue
+
+                    fila = [math.inf if x == 99999 else x for x in fila]
+
+                    sim = True
+                    for j in range(i):
+                        if dist[j][i] != fila[j]:
+                            sim = False
+                            break
+
+                    if not sim:
+                        console.print(
+                            f"[red]La matriz debe ser simétrica: dist[{i+1}][{j+1}] != dist[{j+1}][{i+1}].[/]"
+                        )
+                        continue
+
+                    dist.append(fila)
+                    break
+
+            problema = ProblemaVendedor(dist)
+
+        console.print("[yellow]Ejecutando búsqueda...[/]")
+
+        if tecnica == "greedy":
+            sol, valor, t = busqueda_greedy(problema)
+            console.print(f"[green]Solución greedy:[/] {sol}")
+            console.print(f"Valor: {valor}")
+            console.print(f"Tiempo: {t:.6f} s")
+
+        elif tecnica == "exhaustiva":
+            sol, valor, t, evaluadas = busqueda_exhaustiva(problema)
+            console.print(f"[green]Mejor solución (exhaustiva):[/] {sol}")
+            console.print(f"Valor: {valor}")
+            console.print(f"Evaluadas: {evaluadas}")
+            console.print(f"Tiempo: {t:.6f} s")
+
+        elif tecnica == "branchbound":
+            sol, valor, t, evaluadas = busqueda_branch_and_bound(problema)
+            console.print(f"[green]Mejor solución (B&B):[/] {sol}")
+            console.print(f"Valor: {valor}")
+            console.print(f"Evaluadas: {evaluadas}")
+            console.print(f"Tiempo: {t:.6f} s")
 
         pausa()
 

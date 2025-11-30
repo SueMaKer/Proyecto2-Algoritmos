@@ -28,15 +28,15 @@ def busqueda_greedy(problema: ProblemaBusqueda):
     inicio = time.perf_counter()
 
     sol = problema.solucion_inicial()
+
     while not problema.completo(sol):
-        cands = problema.candidatos(sol)
-        cands = [c for c in cands if problema.factible(sol, c)]
+        cands = [c for c in problema.candidatos(sol) if problema.factible(sol, c)]
+
         if not cands:
-            break
-        # La heurística concreta se define en el problema,
-        # aquí escogemos el candidato "mejor" según evaluar provisionalmente:
-        mejor_c = max(cands, key=lambda c: problema.evaluar(problema.agregar(sol, c)))
-        sol = problema.agregar(sol, mejor_c)
+            break  #No hay forma de continuar
+
+        mejor = max(cands, key=lambda c: problema.evaluar(problema.agregar(sol, c)))
+        sol = problema.agregar(sol, mejor)
 
     valor = problema.evaluar(sol)
     tiempo = time.perf_counter() - inicio
@@ -81,9 +81,8 @@ def busqueda_branch_and_bound(problema: ProblemaBusqueda):
     def backtrack(sol):
         nonlocal mejor_valor, mejor_sol, evaluadas
 
-        bound = problema.cota_superior(sol)
-        if bound < mejor_valor:
-            return  # cortar rama
+        if problema.cota_superior(sol) < mejor_valor:
+            return
 
         if problema.completo(sol):
             evaluadas += 1
