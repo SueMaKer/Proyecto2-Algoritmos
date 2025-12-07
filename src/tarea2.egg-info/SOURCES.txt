@@ -10,3 +10,5 @@ src/tarea2.egg-info/requires.txt
 src/tarea2.egg-info/top_level.txt
 src/tarea2/problemas/asignacion.py
 src/tarea2/problemas/distribucion.py
+src/tarea2/problemas/mochila.py
+src/tarea2/problemas/vendedor.py
